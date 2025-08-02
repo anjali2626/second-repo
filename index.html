@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fit for Life - Login</title>
+    <style>
+        body {
+            background: linear-gradient(to bottom, #4CAF50, #81C784);
+        }
+        .body-1 {
+            font-family: Arial, sans-serif;
+            padding: 0;
+            
+            background-image: url("back.jpg");
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            margin-left: 50px;
+            margin-right: 58px;
+            margin-top: 50px;
+            margin-bottom: 50px;
+    
+        }
+
+        .container {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            width: 400px;
+            padding: 50px;
+            padding-right: 70px;
+            text-align: center;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: #4CAF50;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+
+        input {
+            width: 400px;
+            padding: 10px;
+            margin: 10px 0 ;
+            
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .name-row {
+            display: flex;
+            gap: 20px;
+            width: 420px;
+        }
+
+        .name-row input {
+            width: calc(50% - 5px);
+        }
+
+        button {
+            width: 420px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .message {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .sign-in-message {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .sign-in-message a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .sign-in-message a:hover {
+            text-decoration: underline;
+        }
+
+        .hidden {
+            display: none;
+        }
+        footer {
+           text-align: center;
+           padding: 10px;
+           background: #000000;
+           box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+           color: white;
+           font-size: 20px;
+}
+    </style>
+</head>
+<body>
+    <div class="body-1" opacity="0.7">
+    <div id="login" class="container">
+        <h1>LOGIN</h1>
+        <input type="email" id="email" placeholder="Email" >
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <p class="message" id="loginMessage"></p>
+        <p class="sign-in-message">
+            If you don't have an account, <a href="#" onclick="showSignUp()">Please sign up</a>.
+        </p>
+    </div>
+
+    <div id="signup" class="container hidden">
+        <h1>Sign Up</h1>
+        <div class="name-row">
+            <input type="text" id="firstName" placeholder="First Name">
+            <input type="text" id="lastName" placeholder="Last Name">
+        </div>
+        <input type="email" id="newEmail" placeholder="Enter your email">
+        <input type="password" id="newPassword" placeholder="Enter your password">
+        <button onclick="signUp()">Sign Up</button>
+        <p class="message" id="signUpMessage"></p>
+    </div>
+
+    <script>
+
+    let users = {};
+
+function showSignUp() {
+    document.getElementById('login').classList.add('hidden');
+    document.getElementById('signup').classList.remove('hidden');
+}
+
+function showLogin() {
+    document.getElementById('signup').classList.add('hidden');
+    document.getElementById('login').classList.remove('hidden');
+}
+
+function signUp() {
+    const firstName = document.getElementById('firstName').value;
+    const lastName = document.getElementById('lastName').value;
+    const email = document.getElementById('newEmail').value;
+    const password = document.getElementById('newPassword').value;
+
+    if (firstName && lastName && email && password) {
+        // Save user data in localStorage as an object
+        const user = {
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            password: password
+        };
+        localStorage.setItem('user', JSON.stringify(user));
+
+        // Display success message and switch to login page
+        document.getElementById('signUpMessage').textContent = 'Account created successfully!';
+        document.getElementById('signUpMessage').style.color = 'green';
+        setTimeout(showLogin, 2000); // Show login page after 2 seconds
+    } else {
+        document.getElementById('signUpMessage').textContent = 'Please fill in all fields.';
+        document.getElementById('signUpMessage').style.color = 'red';
+    }
+}
+
+function login() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    // Retrieve user data from localStorage
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+
+    if (storedUser && email === storedUser.email && password === storedUser.password) {
+        // Save the user's first name to sessionStorage for use on the dashboard
+        sessionStorage.setItem('currentUser', storedUser.firstName);
+
+        alert(`Login successful! Welcome ${storedUser.firstName} to Fit for Life!`);
+        
+        // Redirect to the dashboard
+        window.location.href = 'dashboard.html';
+    } else {
+        document.getElementById('loginMessage').textContent = 'Incorrect email or password.';
+        document.getElementById('loginMessage').style.color = 'red';
+    }
+}
+
+</script>
+
+</body>
+</html>
